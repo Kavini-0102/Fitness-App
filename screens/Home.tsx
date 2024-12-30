@@ -8,9 +8,10 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from "react-native";
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
-import { StackNavigationProp } from '@react-navigation/stack'; // Import navigation types
-import { RootStackParamList } from '../type'; // Import navigation types
+import { useNavigation } from '@react-navigation/native'; 
+import { StackNavigationProp } from '@react-navigation/stack'; 
+import { RootStackParamList } from '../type'; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Item = {
   id: number;
@@ -79,10 +80,11 @@ const Home: React.FC<HomeProps> = ({ route }) => {
     setClickCount((prevCount) => prevCount + 1);
   };
 
-  const handleLogOut = () => {
-    // Correctly use the navigation with the correct screen name
-    navigation.navigate("Login");
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('user');
+    navigation.navigate('Login');
   };
+  
 
   if (loading) {
     return (
@@ -105,7 +107,7 @@ const Home: React.FC<HomeProps> = ({ route }) => {
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.userNameStyle}>Welcome, {username}!</Text>
-        <TouchableOpacity onPress={handleLogOut}>
+        <TouchableOpacity onPress={handleLogout}>
           <Text style={styles.logOutStyle}>Log Out</Text>
         </TouchableOpacity>
       </View>
